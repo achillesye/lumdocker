@@ -35,6 +35,7 @@ services:
       context: ./php-fpm
       args:
         - PHP_FPM_VERSION=${PHP_FPM_VERSION}
+        - SERVER_WWW_ROOT=${CONTAINER_WWW_ROOT}
     image: ${COMPOSE_PROJECT_NAME}_php-fpm:${PHP_FPM_VERSION}
     volumes:
       - ${PHP_FPM_CONFIG}php-fpm${PHP_FPM_VERSION}.conf:/usr/local/etc/php-fpm.d/www.conf
@@ -45,18 +46,18 @@ services:
       - xtxserver
 
   ###### redis ###########   
-  redis:
-    build:
-      context: ./redis
-      args:
-        - REDIS_VERSION=${REDIS_VERSION}
-    privileged: true
-    image: ${COMPOSE_PROJECT_NAME}_redis:${REDIS_VERSION}
-    volumes:
-      - ${REDIS_PATH}redis.conf:/etc/redis/redis.conf
-    sysctls:
-      - net.core.somaxconn=511
-    ports:
-      - 6379:6379
-    networks:
-      - xtxserver
+  #redis:
+  #  build:
+  #    context: ./redis
+  #    args:
+  #      - REDIS_VERSION=${REDIS_VERSION}
+  #  privileged: true
+  #  image: ${COMPOSE_PROJECT_NAME}_redis:${REDIS_VERSION}
+  #  volumes:
+  #    - ${REDIS_PATH}redis.conf:/etc/redis/redis.conf
+  #  sysctls:
+  #    - net.core.somaxconn=511
+  #  ports:
+  #    - 6379:6379
+  #  networks:
+  #    - xtxserver

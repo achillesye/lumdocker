@@ -1,0 +1,7 @@
+nlogs/*
+.env
+nginx/vhosts/1v1.api.conf
+nginx/vhosts/blog.conf
+nginx/vhosts/myapp.conf
+nginx/vhosts/scholar.conf
+nginx/vhosts/wp.site.conf

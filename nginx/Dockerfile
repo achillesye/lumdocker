@@ -13,5 +13,4 @@ ARG PHP_FPM_CONTAINER_PORT=${PHP_FPM_CONTAINER_PORT}
 
 RUN echo "upstream php-upstream { server ${PHP_FPM_CONTAINER_NAME}:${PHP_FPM_CONTAINER_PORT}; }" > /etc/nginx/conf.d/upstream.conf
 
-
 EXPOSE 80 443
