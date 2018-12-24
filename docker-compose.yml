@@ -6,45 +6,59 @@ networks:
 
 services:
   ####### nginx #######
-  nginx:
-    build:
-      context: ./nginx
-      args:
-        - NGINX_VERSION=${NGINX_VERSION}
-        - PHP_FPM_CONTAINER_NAME=${PHP_FPM_CONTAINER_NAME}
-        - PHP_FPM_CONTAINER_PORT=${PHP_FPM_CONTAINER_PORT}
-    image: ${COMPOSE_PROJECT_NAME}_nginx:${NGINX_VERSION}    
-    ports:
-      - 80:80
-      - 801:801
-    volumes:
-      - ${NGINX_VHOSTS_PATH}:/etc/nginx/sites-available/
-      - ${NGINX_CONFIG_PATH}laravel.conf:/etc/nginx/conf.d/laravel.conf
-      - ${NGINX_CONFIG_PATH}phpcgi.conf:/etc/nginx/conf.d/phpcgi.conf
-      - ${NGINX_CONFIG}:/etc/nginx/nginx.conf
-      - ${SERVER_WWW_ROOT}:${CONTAINER_WWW_ROOT}
-      - ${NGINX_LOG_PATH}:/var/log/nginx/
-    depends_on:
-      - php-fpm  
-    networks: 
-      - xtxserver
+  #nginx:
+  #  build:
+  #    context: ./nginx
+  #    args:
+  #      - NGINX_VERSION=${NGINX_VERSION}
+  #      - PHP_FPM_CONTAINER_NAME=${PHP_FPM_CONTAINER_NAME}
+  #      - PHP_FPM_CONTAINER_PORT=${PHP_FPM_CONTAINER_PORT}
+  #  image: ${COMPOSE_PROJECT_NAME}_nginx:${NGINX_VERSION}    
+  #  ports:
+  #    - 80:80
+  #    - 801:801
+  #  volumes:
+  #    - ${NGINX_VHOSTS_PATH}:/etc/nginx/sites-available/
+  #    - ${NGINX_CONFIG_PATH}laravel.conf:/etc/nginx/conf.d/laravel.conf
+  #    - ${NGINX_CONFIG_PATH}phpcgi.conf:/etc/nginx/conf.d/phpcgi.conf
+  #    - ${NGINX_CONFIG}:/etc/nginx/nginx.conf
+  #    - ${SERVER_WWW_ROOT}:${CONTAINER_WWW_ROOT}
+  #    - ${NGINX_LOG_PATH}:/var/log/nginx/
+  #  depends_on:
+  #    - php-fpm  
+  #  networks: 
+  #    - xtxserver
 
   ###### php-fpm ######
-  php-fpm:
-    build:
-      context: ./php-fpm
-      args:
-        - PHP_FPM_VERSION=${PHP_FPM_VERSION}
-        - SERVER_WWW_ROOT=${CONTAINER_WWW_ROOT}
-    image: ${COMPOSE_PROJECT_NAME}_php-fpm:${PHP_FPM_VERSION}
-    volumes:
-      - ${PHP_FPM_CONFIG}php-fpm${PHP_FPM_VERSION}.conf:/usr/local/etc/php-fpm.d/www.conf
-      - ${SERVER_WWW_ROOT}:${CONTAINER_WWW_ROOT}
-    ports:
-      - 9000:9000
-    networks:
-      - xtxserver
+  #php-fpm:
+  #  build:
+  #    context: ./php-fpm
+  #    args:
+  #      - PHP_FPM_VERSION=${PHP_FPM_VERSION}
+  #      - SERVER_WWW_ROOT=${CONTAINER_WWW_ROOT}
+  #  image: ${COMPOSE_PROJECT_NAME}_php-fpm:${PHP_FPM_VERSION}
+  #  volumes:
+  #    - ${PHP_FPM_CONFIG}php-fpm${PHP_FPM_VERSION}.conf:/usr/local/etc/php-fpm.d/www.conf
+  #    - ${SERVER_WWW_ROOT}:${CONTAINER_WWW_ROOT}
+  #  ports:
+  #    - 9000:9000
+  #  networks:
+  #    - xtxserver
 
+  #### web ###
+  cenlaravel:
+    build:
+      context: ./web
+      args:
+        - NGINX_VERSION=${NGINX_VERSION}
+        - SERVER_WWW_ROOT=${CONTAINER_WWW_ROOT}
+    volumes:
+      - ${SERVER_WWW_ROOT}:${CONTAINER_WWW_ROOT}
+      - ${NGINX_VHOSTS_PATH}:/etc/nginx/vhosts/
+    ports:
+      - 80:80
+    networks:
+      - xtxserver  
   ###### redis ###########   
   #redis:
   #  build:
